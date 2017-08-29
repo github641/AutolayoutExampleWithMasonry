@@ -59,6 +59,7 @@
         make.height.equalTo(@40);
         make.left.and.right.equalTo(self.view);
         
+        // lzy170829注：定义了 新特性
 #ifdef NEW_FEATURE
         make.top.equalTo(self.mas_topLayoutGuide);
 #endif
@@ -71,7 +72,7 @@
     [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@40);
         make.left.and.right.equalTo(self.view);
-        
+        // lzy170829注：定义了 新特性
 #ifdef NEW_FEATURE
         make.bottom.equalTo(self.mas_bottomLayoutGuide);
 #endif
@@ -82,6 +83,7 @@
 
 - (void)updateViewConstraints {
     
+    // lzy170829注：没有 定义 新特性
 #ifndef NEW_FEATURE
     // 根据新的length值更新约束
     [_topView mas_updateConstraints:^(MASConstraintMaker *make) {

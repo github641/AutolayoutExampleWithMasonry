@@ -5,7 +5,37 @@
 //  Created by zorro on 15/12/5.
 //  Copyright © 2015年 tutuge. All rights reserved.
 //
+/* lzy170829注:
+ 整体流程是这样：
+ model中缓存了：
+ cell的高，
+ cell是否展开的标识。
+ 
+ 
+ cell布局按正常来，只是内容label的加了高度约束：
+ _contentHeightConstraint = make.height.equalTo(@64).with.priorityHigh(); // 优先级只设置成High,比正常的高度约束低一些,防止冲突
 
+ 之后点击cell中的button，delegate回到到VC中，
+ vc的代理方法中做如下操作：
+ 
+ 1、model中取反 『是否展开』标识
+ 2、model中重置高度缓存
+ 3、刷新cell（begin / end update、刷新index的cell）
+ 
+ cell的delegate方法调用完毕，
+ heightForRowAtIndexPath的tableView代理方法将被调用。
+ 寻求所有cell的高度。
+ 其他未被点击的cell，由于高度没有被重置，所以都是使用的model中缓存的高。
+ 而被点击的cell，由于在cell的代理方法中把缓存的高度给重置了，所以会重新使用模板cell，重新算高
+ 
+ cell中关联model，会根据 『是否展开』标识，对约束进行操作：
+ if (_entity.expanded) {
+     [_contentHeightConstraint uninstall];
+ } else {
+     [_contentHeightConstraint install];
+ }
+ 
+ */
 #import "Case8ViewController.h"
 #import "Case8Cell.h"
 #import "Case8DataEntity.h"
@@ -50,11 +80,11 @@
     // **********************************
 
     // 刷新方法1：只会重新计算高度,不会reload cell,所以只是把原来的cell撑大了而已,还是同一个cell实例
-    [_tableView beginUpdates];
-    [_tableView endUpdates];
+//    [_tableView beginUpdates];
+//    [_tableView endUpdates];
 
     // 刷新方法2：先重新计算高度,然后reload,不是原来的cell实例
-//    [_tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
+    [_tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
     
     // 让展开/收回的Cell居中，酌情加，看效果决定
     [_tableView scrollToRowAtIndexPath:index atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
