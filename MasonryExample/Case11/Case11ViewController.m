@@ -50,6 +50,10 @@
     [_containerView addSubview:attachmentView];
     
     [attachmentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        /* lzy170830注:
+         相当于，左侧、下侧是由tipLabel限制住了。上侧、右侧由attachmentView限制住了。
+         */
         // 依附在tipLabel上
         make.left.equalTo(_tipLabel.mas_left).with.offset(20).priorityHigh();
         make.bottom.equalTo(_tipLabel.mas_top).with.offset(-2).priorityHigh();

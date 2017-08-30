@@ -37,8 +37,20 @@
     _centerXConstraint.equalTo(@(-CGRectGetWidth(self.view.frame)));
     // 立即让约束生效
     [self.view layoutIfNeeded];
-    // 设置动画约束
+    
+    // lzy170830注：原版的意思，置为0，更像是恢复原状的意思，有点像核心动画的identify
+    // 设置要动画的约束，移回原位
     _centerXConstraint.equalTo(@0);
+    
+    // lzy170830注：下面一句，label的中心点在self.view的右边缘
+//    _centerXConstraint.equalTo(@(self.view.center.x));
+    
+    /* lzy170830注:下面一句，会崩溃
+     Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'Redefinition of constraint relation'
+     */
+//    _centerXConstraint.equalTo(self.view.mas_centerX);
+
+    
     // 动画生效
     [UIView animateWithDuration:0.3f animations:^{
         [self.view layoutIfNeeded];
